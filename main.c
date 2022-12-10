@@ -31,8 +31,9 @@ int main(int argc, char* argv[])
             image[i][j] = rand() % GRAYSCALE;
         }
     }
-
-    // Print Original Image
+    
+    /* Print Original Image */
+    //
     for(int i = 0; i < rowImg; i++)
     {
         for(int j = 0; j < colImg; j++)
@@ -40,6 +41,29 @@ int main(int argc, char* argv[])
             printf("%d ", image[i][j]);
         }
         printf("\n");
+    }
+
+    for(int imgRowIndx = 0; imgRowIndx < rowImg; imgRowIndx++)
+    {
+        for(int imgColIndx = 0; imgColIndx < rowImg; imgColIndx++)
+        {
+            
+            unsigned int A[5][5];
+            unsigned int B[5][5];
+
+            for(int kernelRowIndx = imgRowIndx; kernelRowIndx < imgRowIndx + 5; kernelRowIndx++)
+            {
+                for(int kernelColIndx = imgColIndx; kernelColIndx < imgRowIndx + 5; kernelColIndx++)
+                {
+                    
+
+                }
+
+
+            }
+
+        }
+
     }
 
     return 0;
