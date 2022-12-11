@@ -61,13 +61,13 @@ int main(int argc, char* argv[])
             unsigned short B[5][5];
 
             /* Prepare A and B matrices */
-            for(int kernelRowIndx = 0; kernelRowIndx < 5; kernelRowIndx++)
+            #pragma omp parallel num_threads(5)
             {
-                for(int kernelColIndx = 0; kernelColIndx < 5; kernelColIndx++)
-                {
-                    A[kernelRowIndx][kernelColIndx] = image[imgRowIndx + kernelRowIndx][imgColIndx + kernelColIndx];
-                    B[kernelRowIndx][kernelColIndx] = image[imgColIndx + kernelColIndx][imgRowIndx + kernelRowIndx];
-                }
+                int kernelRowIndx = omp_get_thread_num();
+                int kernelColIndx = omp_get_thread_num();
+
+                A[kernelRowIndx][kernelColIndx] = image[imgRowIndx + kernelRowIndx][imgColIndx + kernelColIndx];
+                B[kernelRowIndx][kernelColIndx] = image[imgColIndx + kernelColIndx][imgRowIndx + kernelRowIndx];
             }
 
             unsigned short C[5][5];
@@ -144,13 +144,14 @@ int main(int argc, char* argv[])
 void matrixMultiplication(unsigned short matrix1[5][5], unsigned short matrix2[5][5], unsigned short result[][5])
 {
     int row, col, colRow;
+    unsigned short temp;
 
     #pragma omp parallel for private(col, colRow, temp)
     for(row = 0; row < 5; row++)
     {
         for(col = 0; col < 5; col++)
         {
-            unsigned short temp = 0;
+            temp = 0;
             for(colRow = 0; colRow < 5; colRow++)
             {
                 temp += matrix1[row][colRow] * matrix2[colRow][col];
