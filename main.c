@@ -14,9 +14,11 @@ int main(int argc, char* argv[])
     {
         rowImg = colImg = 6;
     }
-
-    rowImg = atoi(argv[1]);
-    colImg = atoi(argv[2]);
+    else
+    {
+        rowImg = atoi(argv[1]);
+        colImg = atoi(argv[2]);
+    }
 
     unsigned short** image = (unsigned short**)malloc(rowImg * sizeof(unsigned short*));
     unsigned short** resultImage = (unsigned short**)malloc(rowImg * sizeof(unsigned short*));
@@ -98,9 +100,13 @@ int main(int argc, char* argv[])
         printf("Error!The Original Image File cannot be Openned");
     }
 
-    if(fwrite(image, sizeof(unsigned short), rowImg*colImg, originalImageFile) != rowImg*colImg)
+    for(int i=0;i<rowImg;i++)
     {
-        printf("File write error.");
+        for(int j=0;j<colImg;j++)
+        {
+            fprintf(originalImageFile,"%d ",image[i][j]);
+        }
+        fprintf(originalImageFile,"\n");
     }
 
     fclose(originalImageFile);
@@ -110,9 +116,13 @@ int main(int argc, char* argv[])
         printf("Error!The Original Image File cannot be Openned");
     }
 
-    if(fwrite(image, sizeof(unsigned short), rowImg*colImg, resultImageFile) != rowImg*colImg)
+    for(int i=0;i<rowImg;i++)
     {
-        printf("File write error.");
+        for(int j=0;j<colImg;j++)
+        {
+            fprintf(resultImageFile,"%d ",resultImage[i][j]);
+        }
+        fprintf(resultImageFile, "\n");
     }
 
     fclose(resultImageFile);
