@@ -10,7 +10,7 @@
             "request": "launch",
             "program": "${workspaceFolder}/${fileBasenameNoExtension}",
             "args": [
-                5, 5
+                50, 50
             ],
             "stopAtEntry": false,
             "cwd": "${fileDirname}",
@@ -18,6 +18,21 @@
             "externalConsole": false,
             "MIMode": "lldb",
             "preLaunchTask": "C/C++: clang build active file"
+        },
+        {
+            "name": "clang++ - Build and debug active file with OpenMP",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/${fileBasenameNoExtension}",
+            "args": [
+                50, 50
+            ],
+            "stopAtEntry": false,
+            "cwd": "${fileDirname}",
+            "environment": [],
+            "externalConsole": false,
+            "MIMode": "lldb",
+            "preLaunchTask": "C: clang build active file with OpenMP"
         }
     ]
 }

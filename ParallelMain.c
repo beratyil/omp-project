@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
+#include <omp.h>
 
 #define GRAYSCALE (65536 / 1024) - 1
 
@@ -142,12 +143,15 @@ int main(int argc, char* argv[])
 
 void matrixMultiplication(unsigned short matrix1[5][5], unsigned short matrix2[5][5], unsigned short result[][5])
 {
-    for(int row = 0; row < 5; row++)
+    int row, col, colRow;
+
+    #pragma omp parallel for private(col, colRow, temp)
+    for(row = 0; row < 5; row++)
     {
-        for(int col = 0; col < 5; col++)
+        for(col = 0; col < 5; col++)
         {
             unsigned short temp = 0;
-            for(int colRow = 0; colRow < 5; colRow++)
+            for(colRow = 0; colRow < 5; colRow++)
             {
                 temp += matrix1[row][colRow] * matrix2[colRow][col];
             }

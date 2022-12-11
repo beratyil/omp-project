@@ -2,3 +2,8 @@ main.dSYM
 main
 originalImage.txt
 resultImage.txt
+ParallelMain
+SerialMain
+.DS_Store
+SerialMain.dSYM
+ParallelMain.dSYM
