@@ -74,26 +74,15 @@ int main(int argc, char* argv[])
             memset(C, 0, sizeof(C));
 
             matrixMultiplication(A, B, C);
-            
-            // Uncomment lines below in order to print C
-            // printf("\nKernel Matrix\n");
 
-            // for(int i = 0; i < 5; i++)
-            // {
-            //     for(int j = 0; j < 5; j++)
-            //     {
-            //         printf("%d ", C[i][j]);
-            //     }
-            //     printf("\n");
-            // }
-
-            for(int kernelRowIndx = 0; kernelRowIndx < 5; kernelRowIndx++)
+            #pragma omp parallel num_threads(5)
             {
-                for(int kernelColIndx = 0; kernelColIndx < 5; kernelColIndx++)
-                {
-                    resultImage[imgRowIndx + kernelRowIndx][imgColIndx + kernelColIndx] += C[kernelRowIndx][kernelColIndx];
-                }
+                int kernelRowIndx = omp_get_thread_num();
+                int kernelColIndx = omp_get_thread_num();
+
+                resultImage[imgRowIndx + kernelRowIndx][imgColIndx + kernelColIndx] += C[kernelRowIndx][kernelColIndx];
             }
+
         }
     }
 
@@ -101,7 +90,7 @@ int main(int argc, char* argv[])
 
     FILE* originalImageFile, * resultImageFile;
 
-    if((originalImageFile = fopen("./originalImage.txt", "wb")) == NULL)
+    if((originalImageFile = fopen("./originalImageOpenMP.txt", "wb")) == NULL)
     {
         printf("Error!The Original Image File cannot be Openned");
     }
@@ -117,7 +106,7 @@ int main(int argc, char* argv[])
 
     fclose(originalImageFile);
 
-    if((resultImageFile = fopen("./resultImage.txt", "wb")) == NULL)
+    if((resultImageFile = fopen("./resultImageOpenMP.txt", "wb")) == NULL)
     {
         printf("Error!The Original Image File cannot be Openned");
     }

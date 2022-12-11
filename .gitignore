@@ -7,3 +7,4 @@ SerialMain
 .DS_Store
 SerialMain.dSYM
 ParallelMain.dSYM
+*.txt
