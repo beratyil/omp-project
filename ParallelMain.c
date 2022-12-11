@@ -38,6 +38,7 @@ int main(int argc, char* argv[])
         for(int j = 0; j < colImg; j++)
         {
             image[i][j] = rand() % GRAYSCALE;
+            resultImage[i][j] = 0;
         }
     }
     
@@ -64,10 +65,11 @@ int main(int argc, char* argv[])
             #pragma omp parallel num_threads(5)
             {
                 int kernelRowIndx = omp_get_thread_num();
-                int kernelColIndx = omp_get_thread_num();
 
-                A[kernelRowIndx][kernelColIndx] = image[imgRowIndx + kernelRowIndx][imgColIndx + kernelColIndx];
-                B[kernelRowIndx][kernelColIndx] = image[imgColIndx + kernelColIndx][imgRowIndx + kernelRowIndx];
+                for(int kernelColIndx = 0; kernelColIndx < 5; kernelColIndx++){
+                    A[kernelRowIndx][kernelColIndx] = image[imgRowIndx + kernelRowIndx][imgColIndx + kernelColIndx];
+                    B[kernelRowIndx][kernelColIndx] = image[imgColIndx + kernelColIndx][imgRowIndx + kernelRowIndx];
+                }
             }
 
             unsigned short C[5][5];
@@ -78,11 +80,11 @@ int main(int argc, char* argv[])
             #pragma omp parallel num_threads(5)
             {
                 int kernelRowIndx = omp_get_thread_num();
-                int kernelColIndx = omp_get_thread_num();
 
-                resultImage[imgRowIndx + kernelRowIndx][imgColIndx + kernelColIndx] += C[kernelRowIndx][kernelColIndx];
+                for(int kernelColIndx = 0; kernelColIndx < 5; kernelColIndx++){
+                    resultImage[imgRowIndx + kernelRowIndx][imgColIndx + kernelColIndx] += C[kernelRowIndx][kernelColIndx];
+                }
             }
-
         }
     }
 

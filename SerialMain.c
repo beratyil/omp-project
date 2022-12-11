@@ -31,12 +31,15 @@ int main(int argc, char* argv[])
         image[i] = (unsigned short*)malloc(colImg * sizeof(unsigned short));
         resultImage[i] = (unsigned short*)malloc(colImg * sizeof(unsigned short));
     }
+    
+    // memset(resultImage, 0, sizeof(resultImage));
 
     for(int i = 0; i < rowImg; i++)
     {
         for(int j = 0; j < colImg; j++)
         {
             image[i][j] = rand() % GRAYSCALE;
+            resultImage[i][j] = 0;
         }
     }
     
