@@ -41,52 +41,47 @@ int main(int argc, char* argv[])
             resultImage[i][j] = 0;
         }
     }
-    
-    /* Print Original Image */
 
-    // for(int i = 0; i < rowImg; i++)
-    // {
-    //     for(int j = 0; j < colImg; j++)
-    //     {
-    //         printf("%d ", image[i][j]);
-    //     }
-    //     printf("\n");
-    // }
-
-    for(int imgRowIndx = 0; imgRowIndx + 5 <= rowImg; imgRowIndx++)
+    #pragma omp parallel for collapsable(2)
     {
-        for(int imgColIndx = 0; imgColIndx <= imgRowIndx; imgColIndx++)
+        for(int imgRowIndx = 0; imgRowIndx <= rowImg - 5; imgRowIndx++)
         {
-            
-            unsigned short A[5][5];
-            unsigned short B[5][5];
-
-            /* Prepare A and B matrices */
-            #pragma omp parallel num_threads(5)
+            for(int imgColIndx = 0; imgColIndx <= imgRowIndx; imgColIndx++)
             {
-                int kernelRowIndx = omp_get_thread_num();
+                unsigned short A[5][5];
+                unsigned short B[5][5];
 
-                for(int kernelColIndx = 0; kernelColIndx < 5; kernelColIndx++){
-                    A[kernelRowIndx][kernelColIndx] = image[imgRowIndx + kernelRowIndx][imgColIndx + kernelColIndx];
-                    B[kernelRowIndx][kernelColIndx] = image[imgColIndx + kernelColIndx][imgRowIndx + kernelRowIndx];
+                /* Prepare A and B matrices */
+                #pragma omp parallel num_threads(5)
+                {
+                    int kernelRowIndx = omp_get_thread_num();
+
+                    for(int kernelColIndx = 0; kernelColIndx < 5; kernelColIndx++){
+                        A[kernelRowIndx][kernelColIndx] = image[imgRowIndx + kernelRowIndx][imgColIndx + kernelColIndx];
+                        B[kernelRowIndx][kernelColIndx] = image[imgColIndx + kernelColIndx][imgRowIndx + kernelRowIndx];
+                    }
                 }
-            }
 
-            unsigned short C[5][5];
-            memset(C, 0, sizeof(C));
+                unsigned short C[5][5];
+                memset(C, 0, sizeof(C));
 
-            matrixMultiplication(A, B, C);
+                matrixMultiplication(A, B, C);
 
-            #pragma omp parallel num_threads(5)
-            {
-                int kernelRowIndx = omp_get_thread_num();
+                #pragma omp parallel num_threads(5)
+                {
+                    int kernelRowIndx = omp_get_thread_num();
 
-                for(int kernelColIndx = 0; kernelColIndx < 5; kernelColIndx++){
-                    resultImage[imgRowIndx + kernelRowIndx][imgColIndx + kernelColIndx] += C[kernelRowIndx][kernelColIndx];
+                    for(int kernelColIndx = 0; kernelColIndx < 5; kernelColIndx++){
+                        #pragma omp critical
+                        resultImage[imgRowIndx + kernelRowIndx][imgColIndx + kernelColIndx] += C[kernelRowIndx][kernelColIndx];
+                    }
                 }
             }
         }
+
+        
     }
+    
 
     time_t imageProcessingTime = clock();
 
