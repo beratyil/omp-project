@@ -32,8 +32,6 @@ int main(int argc, char* argv[])
         resultImage[i] = (unsigned short*)malloc(colImg * sizeof(unsigned short));
     }
     
-    // memset(resultImage, 0, sizeof(resultImage));
-
     for(int i = 0; i < rowImg; i++)
     {
         for(int j = 0; j < colImg; j++)
@@ -42,17 +40,6 @@ int main(int argc, char* argv[])
             resultImage[i][j] = 0;
         }
     }
-    
-    /* Print Original Image */
-
-    // for(int i = 0; i < rowImg; i++)
-    // {
-    //     for(int j = 0; j < colImg; j++)
-    //     {
-    //         printf("%d ", image[i][j]);
-    //     }
-    //     printf("\n");
-    // }
 
     for(int imgRowIndx = 0; imgRowIndx + 5 <= rowImg; imgRowIndx++)
     {
