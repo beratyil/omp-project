@@ -73,7 +73,7 @@ int main(int argc, char* argv[])
                 {
                     for(int kernelColIndx = 0; kernelColIndx < 5; kernelColIndx++)
                     {
-                        #pragma omp critical
+                        #pragma omp atomic update
                         resultImage[imgRowIndx + kernelRowIndx][imgColIndx + kernelColIndx] += C[kernelRowIndx][kernelColIndx];
                     }
                 }
