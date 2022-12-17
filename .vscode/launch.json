@@ -10,7 +10,7 @@
             "request": "launch",
             "program": "${workspaceFolder}/${fileBasenameNoExtension}",
             "args": [
-                50, 50
+                5000, 5000
             ],
             "stopAtEntry": false,
             "cwd": "${fileDirname}",
@@ -25,7 +25,7 @@
             "request": "launch",
             "program": "${workspaceFolder}/${fileBasenameNoExtension}",
             "args": [
-                50, 50
+                5000, 5000
             ],
             "stopAtEntry": false,
             "cwd": "${fileDirname}",

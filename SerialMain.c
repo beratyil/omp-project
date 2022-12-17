@@ -63,18 +63,6 @@ int main(int argc, char* argv[])
             memset(C, 0, sizeof(C));
 
             matrixMultiplication(A, B, C);
-            
-            // Uncomment lines below in order to print C
-            // printf("\nKernel Matrix\n");
-
-            // for(int i = 0; i < 5; i++)
-            // {
-            //     for(int j = 0; j < 5; j++)
-            //     {
-            //         printf("%d ", C[i][j]);
-            //     }
-            //     printf("\n");
-            // }
 
             for(int kernelRowIndx = 0; kernelRowIndx < 5; kernelRowIndx++)
             {
