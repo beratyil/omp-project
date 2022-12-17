@@ -46,6 +46,9 @@ int main(int argc, char* argv[])
     unsigned short B[5][5];
     unsigned short C[5][5];
 
+    // omp_set_nested(1);
+    omp_set_max_active_levels(2);
+
     #pragma omp parallel for collapse(2) private(A,B,C) shared(resultImage, image)
     {
         for(int imgRowIndx = 0; imgRowIndx <= rowImg - 5; imgRowIndx++)
