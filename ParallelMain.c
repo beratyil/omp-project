@@ -42,7 +42,7 @@ int main(int argc, char* argv[])
         }
     }
 
-    #pragma omp parallel for collapsable(2)
+    #pragma omp parallel for collapse(2)
     {
         for(int imgRowIndx = 0; imgRowIndx <= rowImg - 5; imgRowIndx++)
         {
