@@ -42,36 +42,34 @@ int main(int argc, char* argv[])
         }
     }
 
-    #pragma omp parallel for collapse(2)
+    unsigned short A[5][5];
+    unsigned short B[5][5];
+    unsigned short C[5][5];
+
+    #pragma omp parallel for collapse(2) private(A,B,C) shared(resultImage, image)
     {
         for(int imgRowIndx = 0; imgRowIndx <= rowImg - 5; imgRowIndx++)
         {
             for(int imgColIndx = 0; imgColIndx <= imgRowIndx; imgColIndx++)
             {
-                unsigned short A[5][5];
-                unsigned short B[5][5];
-
                 /* Prepare A and B matrices */
-                #pragma omp parallel num_threads(5)
+                for(int kernelRowIndx = 0; kernelRowIndx < 5; kernelRowIndx++)
                 {
-                    int kernelRowIndx = omp_get_thread_num();
-
-                    for(int kernelColIndx = 0; kernelColIndx < 5; kernelColIndx++){
+                    for(int kernelColIndx = 0; kernelColIndx < 5; kernelColIndx++)
+                    {
                         A[kernelRowIndx][kernelColIndx] = image[imgRowIndx + kernelRowIndx][imgColIndx + kernelColIndx];
                         B[kernelRowIndx][kernelColIndx] = image[imgColIndx + kernelColIndx][imgRowIndx + kernelRowIndx];
                     }
                 }
 
-                unsigned short C[5][5];
                 memset(C, 0, sizeof(C));
 
                 matrixMultiplication(A, B, C);
 
-                #pragma omp parallel num_threads(5)
+                for(int kernelRowIndx = 0; kernelRowIndx < 5; kernelRowIndx++)
                 {
-                    int kernelRowIndx = omp_get_thread_num();
-
-                    for(int kernelColIndx = 0; kernelColIndx < 5; kernelColIndx++){
+                    for(int kernelColIndx = 0; kernelColIndx < 5; kernelColIndx++)
+                    {
                         #pragma omp critical
                         resultImage[imgRowIndx + kernelRowIndx][imgColIndx + kernelColIndx] += C[kernelRowIndx][kernelColIndx];
                     }
@@ -132,17 +130,15 @@ void matrixMultiplication(unsigned short matrix1[5][5], unsigned short matrix2[5
     int row, col, colRow;
     unsigned short temp;
 
-    #pragma omp parallel for private(col, colRow, temp)
+    // #pragma omp parallel for private(col, colRow, temp)
     for(row = 0; row < 5; row++)
     {
         for(col = 0; col < 5; col++)
         {
-            temp = 0;
             for(colRow = 0; colRow < 5; colRow++)
             {
-                temp += matrix1[row][colRow] * matrix2[colRow][col];
+                result[row][col] += matrix1[row][colRow] * matrix2[colRow][col];
             }
-            result[row][col] = temp;
         }
     }
     return;    
